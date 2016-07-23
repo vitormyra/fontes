@@ -1,6 +1,7 @@
 package br.com.videoaula.agendacontato;
 
 import android.app.DatePickerDialog;
+import android.app.IntentService;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
@@ -51,17 +52,17 @@ public class ActCadContatos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_cad_contatos);
 
-        edtNome = (EditText)findViewById(R.id.edtNome);
-        edtEmail = (EditText)findViewById(R.id.edtEmail);
-        edtEndereco = (EditText)findViewById(R.id.edtEndereco);
-        edtTipoDatasEspeciais = (EditText)findViewById(R.id.edtDatasEspeciais);
-        edtGrupos = (EditText)findViewById(R.id.edtGrupos);
-        edtTelefone = (EditText)findViewById(R.id.edtTelefone);
+        edtNome = (EditText) findViewById(R.id.edtNome);
+        edtEmail = (EditText) findViewById(R.id.edtEmail);
+        edtEndereco = (EditText) findViewById(R.id.edtEndereco);
+        edtTipoDatasEspeciais = (EditText) findViewById(R.id.edtDatasEspeciais);
+        edtGrupos = (EditText) findViewById(R.id.edtGrupos);
+        edtTelefone = (EditText) findViewById(R.id.edtTelefone);
 
-        spnTipoEmail = (Spinner)findViewById(R.id.spnTipoEmail);
-        spnTipoTelefone = (Spinner)findViewById(R.id.spnTipoTelefone);
-        spnTipoEndereco = (Spinner)findViewById(R.id.spnTipoEndereco);
-        spnTipoDatasEspeciais = (Spinner)findViewById(R.id.spnTipoDatasEspeciais);
+        spnTipoEmail = (Spinner) findViewById(R.id.spnTipoEmail);
+        spnTipoTelefone = (Spinner) findViewById(R.id.spnTipoTelefone);
+        spnTipoEndereco = (Spinner) findViewById(R.id.spnTipoEndereco);
+        spnTipoDatasEspeciais = (Spinner) findViewById(R.id.spnTipoDatasEspeciais);
 
         adpTipoEmail = new ArrayAdapter<String>(ActCadContatos.this, android.R.layout.simple_spinner_item);
         adpTipoEmail.setDropDownViewResource(android.R.layout.simple_spinner_item);
@@ -106,15 +107,25 @@ public class ActCadContatos extends AppCompatActivity {
         edtTipoDatasEspeciais.setOnClickListener(listener);
         edtTipoDatasEspeciais.setOnFocusChangeListener(listener);
 
+
+        Bundle bundle = getIntent().getExtras();
+        if ((bundle != null) && (bundle.containsKey("CONTATO"))) {
+            contato = (Contato)bundle.getSerializable("CONTATO");
+            preencheDados();
+        }
+        else{
+            contato = new Contato();
+        }
+
+
         contato = new Contato();
 
-        try{
+        try {
             dataBase = new DataBase(ActCadContatos.this);
             conn = dataBase.getWritableDatabase();
 
             repositorioContato = new RepositorioContato(conn);
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             AlertDialog.Builder dlg = new AlertDialog.Builder(ActCadContatos.this);
             dlg.setMessage("Erro ao criar o banco: " + ex.getMessage());
             dlg.setNeutralButton("OK", null);
@@ -132,9 +143,9 @@ public class ActCadContatos extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.mni_acao1:
-                if(contato == null){
+                if (contato.getId() == 0) {
                     inserir();
                 }
                 finish();
@@ -146,24 +157,40 @@ public class ActCadContatos extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void inserir(){
-        try{
-        contato.setNome(edtNome.getText().toString());
-        contato.setTelefone(edtTelefone.getText().toString());
-        contato.setEmail(edtEmail.getText().toString());
-        contato.setEndereco(edtEndereco.getText().toString());
+    private void preencheDados(){
+        edtNome.setText(contato.getNome());
+        edtTelefone.setText(contato.getTelefone());
+        spnTipoTelefone.setSelection(Integer.parseInt(contato.getTipoTelefone()));
+        edtEmail.setText(contato.getEmail());
+        spnTipoEmail.setSelection(Integer.parseInt(contato.getEmail()));
+        edtEndereco.setText(contato.getEndereco());
+        spnTipoEndereco.setSelection(Integer.parseInt(contato.getTipoEndereco()));
 
-        contato.setGrupos(edtGrupos.getText().toString());
+        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
+        String dt = format.format(contato.getDatasEspeciais());
+
+        edtTipoDatasEspeciais.setText(dt);
+        spnTipoDatasEspeciais.setSelection(Integer.parseInt(contato.getTipoDatasEspeciais()));
+        edtGrupos.setText(contato.getGrupos());
+    }
+
+    private void inserir() {
+        try {
+            contato.setNome(edtNome.getText().toString());
+            contato.setTelefone(edtTelefone.getText().toString());
+            contato.setEmail(edtEmail.getText().toString());
+            contato.setEndereco(edtEndereco.getText().toString());
+
+            contato.setGrupos(edtGrupos.getText().toString());
 
 
-        contato.setTipoTelefone(String.valueOf(spnTipoTelefone.getSelectedItemPosition()));
-        contato.setTipoEndereco(String.valueOf(spnTipoEndereco.getSelectedItemPosition()));
-        contato.setTipoEmail(String.valueOf(spnTipoEmail.getSelectedItemPosition()));
-        contato.setTipoDatasEspeciais(String.valueOf(spnTipoDatasEspeciais.getSelectedItemPosition()));
+            contato.setTipoTelefone(String.valueOf(spnTipoTelefone.getSelectedItemPosition()));
+            contato.setTipoEndereco(String.valueOf(spnTipoEndereco.getSelectedItemPosition()));
+            contato.setTipoEmail(String.valueOf(spnTipoEmail.getSelectedItemPosition()));
+            contato.setTipoDatasEspeciais(String.valueOf(spnTipoDatasEspeciais.getSelectedItemPosition()));
 
-        repositorioContato.inserir(contato);
-        }
-        catch (Exception ex){
+            repositorioContato.inserir(contato);
+        } catch (Exception ex) {
             AlertDialog.Builder dlg = new AlertDialog.Builder(ActCadContatos.this);
             dlg.setMessage("Erro ao inserir os dados: " + ex.getMessage());
             dlg.setNeutralButton("OK", null);
@@ -171,7 +198,7 @@ public class ActCadContatos extends AppCompatActivity {
         }
     }
 
-    private void exibeData(){
+    private void exibeData() {
         Calendar calendar = Calendar.getInstance();
 
         int ano = calendar.get(Calendar.YEAR);
@@ -183,7 +210,7 @@ public class ActCadContatos extends AppCompatActivity {
         dlg.show();
     }
 
-    private class ExibeDataListener implements View.OnClickListener, View.OnFocusChangeListener{
+    private class ExibeDataListener implements View.OnClickListener, View.OnFocusChangeListener {
 
         @Override
         public void onClick(View view) {
@@ -192,11 +219,12 @@ public class ActCadContatos extends AppCompatActivity {
 
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
-            if(hasFocus){
+            if (hasFocus) {
                 exibeData();
             }
         }
     }
+
     private class SelecionaDataListener implements DatePickerDialog.OnDateSetListener {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {

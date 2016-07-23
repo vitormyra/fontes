@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.*;
 import android.widget.*;
 
+import org.apache.http.conn.ConnectTimeoutException;
+
 import java.util.Date;
 
 import br.com.videoaula.agendacontato.R;
@@ -25,16 +27,16 @@ public class RepositorioContato {
 
     public void inserir(Contato contato){
         ContentValues values = new ContentValues();
-        values.put("NOME", contato.getNome());
-        values.put("TELEFONE", contato.getTelefone());
-        values.put("TIPOTELEFONE", contato.getTipoTelefone());
-        values.put("EMAIL", contato.getEmail());
-        values.put("TIPOEMAIL", contato.getTipoEmail());
-        values.put("ENDERECO", contato.getEndereco());
-        values.put("TIPOENDERECO", contato.getTipoEndereco());
-        values.put("DATASESPECIAIS", contato.getDatasEspeciais().getTime());
-        values.put("TIPODATASESPECIAIS", contato.getTipoDatasEspeciais());
-        values.put("GRUPOS", contato.getGrupos());
+        values.put(contato.NOME, contato.getNome());
+        values.put(contato.TELEFONE, contato.getTelefone());
+        values.put(contato.TIPOTELEFONE, contato.getTipoTelefone());
+        values.put(contato.EMAIL, contato.getEmail());
+        values.put(contato.TIPOEMAIL, contato.getTipoEmail());
+        values.put(contato.ENDERECO, contato.getEndereco());
+        values.put(contato.TIPOENDERECO, contato.getTipoEndereco());
+        values.put(contato.DATASESPECIAIS, contato.getDatasEspeciais().getTime());
+        values.put(contato.TIPODATASESPECIAIS, contato.getTipoDatasEspeciais());
+        values.put(contato.GRUPOS, contato.getGrupos());
 
         conn.insertOrThrow("CONTATO", null, values);
     }
@@ -50,16 +52,17 @@ public class RepositorioContato {
             cursor.moveToFirst();
             do{
                 Contato contato = new Contato();
-                contato.setNome(cursor.getString(1));
-                contato.setTelefone(cursor.getString(2));
-                contato.setTipoTelefone(cursor.getString(3));
-                contato.setEmail(cursor.getString(4));
-                contato.setTipoEmail(cursor.getString(5));
-                contato.setEndereco(cursor.getString(6));
-                contato.setTipoEndereco(cursor.getString(7));
-                contato.setDatasEspeciais(new Date(cursor.getLong(8)));
-                contato.setTipoDatasEspeciais(cursor.getString(9));
-                contato.setGrupos(cursor.getString(10));
+                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.ID)));
+                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.NOME)));
+                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.TELEFONE)));
+                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.TIPOTELEFONE)));
+                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.EMAIL)));
+                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.TIPOTELEFONE)));
+                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.ENDERECO)));
+                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.TIPOENDERECO)));
+                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.DATASESPECIAIS)));
+                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.TIPODATASESPECIAIS)));
+                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.GRUPOS)));
                 adpContatos.add(contato);
             }while (cursor.moveToNext());
         }

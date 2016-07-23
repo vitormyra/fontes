@@ -5,6 +5,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.*;
 import android.view.*;
 import android.content.*;
@@ -16,7 +17,7 @@ import br.com.videoaula.agendacontato.database.DataBase;
 import br.com.videoaula.agendacontato.dominio.RepositorioContato;
 import br.com.videoaula.agendacontato.dominio.entidades.Contato;
 
-public class ActContato extends ActionBarActivity implements View.OnClickListener {
+public class ActContato extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
     private ImageButton ibtAdicionar;
     private EditText edtPesquisa;
@@ -60,6 +61,7 @@ public class ActContato extends ActionBarActivity implements View.OnClickListene
 
 
         ibtAdicionar.setOnClickListener(ActContato.this);
+        lstContatos.setOnItemClickListener(ActContato.this);
 
         try{
             dataBase = new DataBase(ActContato.this);
@@ -84,7 +86,6 @@ public class ActContato extends ActionBarActivity implements View.OnClickListene
 
         Intent it = new Intent(ActContato.this, ActCadContatos.class);
         startActivityForResult(it, 0);
-
     }
 
     @Override
@@ -92,5 +93,14 @@ public class ActContato extends ActionBarActivity implements View.OnClickListene
         adpContatos = repositorioContato.buscaContatos(ActContato.this);
 
         lstContatos.setAdapter(adpContatos);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Contato contato = adpContatos.getItem(position);
+
+        Intent it = new Intent(ActContato.this, ActCadContatos.class);
+        it.putExtra("CONTATO", contato);
+        startActivityForResult(it, 0);
     }
 }
