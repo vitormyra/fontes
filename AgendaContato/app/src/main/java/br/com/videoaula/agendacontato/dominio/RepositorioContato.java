@@ -41,6 +41,10 @@ public class RepositorioContato {
         return values;
     }
 
+    public void excluir(long id){
+        conn.delete("CONTATO", "_id = ? ", new String[]{String.valueOf(id)});
+    }
+
     public void alterar(Contato contato) {
             ContentValues values = preencheContentValues(contato);
             conn.update("CONTATO", values, "_id = ? ", new String[]{String.valueOf(contato.getId())});

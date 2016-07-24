@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
@@ -132,8 +133,14 @@ public class ActCadContatos extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_act_contato, menu);
-        return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_act_contato, menu);
+
+        if (contato.getId() != 0) {
+            menu.getItem(1).setVisible(true);
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -146,6 +153,8 @@ public class ActCadContatos extends AppCompatActivity {
                     finish();
                     break;
                 case R.id.mni_acao2:
+                    excluir();
+                    finish();
                     break;
             }
         } catch (Exception ex) {
@@ -175,6 +184,17 @@ public class ActCadContatos extends AppCompatActivity {
         edtGrupos.setText(contato.getGrupos());
     }
 
+    private void excluir() {
+        try {
+            repositorioContato.excluir(contato.getId());
+        } catch (Exception ex) {
+            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+            dlg.setMessage("Erro ao excluir " + ex.getMessage());
+            dlg.setNeutralButton("OK", null);
+            dlg.show();
+        }
+    }
+
     private void salvar() {
         try {
             contato.setNome(edtNome.getText().toString());
@@ -189,10 +209,9 @@ public class ActCadContatos extends AppCompatActivity {
             contato.setTipoEndereco(String.valueOf(spnTipoEndereco.getSelectedItemPosition()));
             contato.setTipoEmail(String.valueOf(spnTipoEmail.getSelectedItemPosition()));
             contato.setTipoDatasEspeciais(String.valueOf(spnTipoDatasEspeciais.getSelectedItemPosition()));
-            if(contato.getId() == 0){
-            repositorioContato.inserir(contato);
-            }
-            else{
+            if (contato.getId() == 0) {
+                repositorioContato.inserir(contato);
+            } else {
                 repositorioContato.alterar(contato);
             }
         } catch (Exception ex) {
