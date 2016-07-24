@@ -3,14 +3,12 @@ package br.com.videoaula.agendacontato.dominio;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.*;
-import android.widget.*;
-
-import org.apache.http.conn.ConnectTimeoutException;
+import android.database.sqlite.SQLiteDatabase;
+import android.widget.ArrayAdapter;
 
 import java.util.Date;
+import java.util.StringTokenizer;
 
-import br.com.videoaula.agendacontato.R;
 import br.com.videoaula.agendacontato.dominio.entidades.Contato;
 
 /**
@@ -20,12 +18,14 @@ public class RepositorioContato {
 
 
     private SQLiteDatabase conn;
-    public RepositorioContato(SQLiteDatabase conn){
+
+    public RepositorioContato(SQLiteDatabase conn) {
         this.conn = conn;
 
     }
 
-    public void inserir(Contato contato){
+    private ContentValues preencheContentValues(Contato contato){
+
         ContentValues values = new ContentValues();
         values.put(contato.NOME, contato.getNome());
         values.put(contato.TELEFONE, contato.getTelefone());
@@ -38,33 +38,43 @@ public class RepositorioContato {
         values.put(contato.TIPODATASESPECIAIS, contato.getTipoDatasEspeciais());
         values.put(contato.GRUPOS, contato.getGrupos());
 
-        conn.insertOrThrow("CONTATO", null, values);
+        return values;
+    }
+
+    public void alterar(Contato contato) {
+            ContentValues values = preencheContentValues(contato);
+            conn.update("CONTATO", values, "_id = ? ", new String[]{String.valueOf(contato.getId())});
+    }
+
+    public void inserir(Contato contato) {
+            ContentValues values = preencheContentValues(contato);
+            conn.insertOrThrow("CONTATO", null, values);
     }
 
 
-    public ArrayAdapter<Contato>buscaContatos(Context context){
+    public ArrayAdapter<Contato> buscaContatos(Context context) {
 
         ArrayAdapter<Contato> adpContatos = new ArrayAdapter<Contato>(context, android.R.layout.simple_list_item_1);
 
-        Cursor cursor = conn.query("CONTATO", null, null,null, null, null, null);
+        Cursor cursor = conn.query("CONTATO", null, null, null, null, null, null);
 
-        if(cursor.getCount() > 0){
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
-            do{
+            do {
                 Contato contato = new Contato();
                 contato.setId(cursor.getLong(cursor.getColumnIndex(contato.ID)));
-                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.NOME)));
-                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.TELEFONE)));
-                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.TIPOTELEFONE)));
-                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.EMAIL)));
-                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.TIPOTELEFONE)));
-                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.ENDERECO)));
-                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.TIPOENDERECO)));
-                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.DATASESPECIAIS)));
-                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.TIPODATASESPECIAIS)));
-                contato.setId(cursor.getLong(cursor.getColumnIndex(contato.GRUPOS)));
+                contato.setNome(cursor.getString(cursor.getColumnIndex(contato.NOME)));
+                contato.setTelefone(cursor.getString(cursor.getColumnIndex(contato.TELEFONE)));
+                contato.setTipoTelefone(cursor.getString(cursor.getColumnIndex(contato.TIPOTELEFONE)));
+                contato.setEmail(cursor.getString(cursor.getColumnIndex(contato.EMAIL)));
+                contato.setTipoEmail(cursor.getString(cursor.getColumnIndex(contato.TIPOTELEFONE)));
+                contato.setEndereco(cursor.getString(cursor.getColumnIndex(contato.ENDERECO)));
+                contato.setTipoEndereco(cursor.getString(cursor.getColumnIndex(contato.TIPOENDERECO)));
+                contato.setDatasEspeciais(new Date(cursor.getLong(cursor.getColumnIndex(contato.DATASESPECIAIS))));
+                contato.setTipoDatasEspeciais(cursor.getString(cursor.getColumnIndex(contato.TIPODATASESPECIAIS)));
+                contato.setGrupos(cursor.getString(cursor.getColumnIndex(contato.GRUPOS)));
                 adpContatos.add(contato);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
 
         return adpContatos;

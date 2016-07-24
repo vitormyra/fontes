@@ -110,15 +110,11 @@ public class ActCadContatos extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if ((bundle != null) && (bundle.containsKey("CONTATO"))) {
-            contato = (Contato)bundle.getSerializable("CONTATO");
+            contato = (Contato) bundle.getSerializable("CONTATO");
             preencheDados();
-        }
-        else{
+        } else {
             contato = new Contato();
         }
-
-
-        contato = new Contato();
 
         try {
             dataBase = new DataBase(ActCadContatos.this);
@@ -143,26 +139,31 @@ public class ActCadContatos extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case R.id.mni_acao1:
-                if (contato.getId() == 0) {
-                    inserir();
-                }
-                finish();
-                break;
-            case R.id.mni_acao2:
-                break;
-        }
+        try {
+            switch (item.getItemId()) {
+                case R.id.mni_acao1:
+                    salvar();
+                    finish();
+                    break;
+                case R.id.mni_acao2:
+                    break;
+            }
+        } catch (Exception ex) {
+            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+            dlg.setMessage(ex.getMessage());
+            dlg.setNeutralButton("OK", null);
+            dlg.show();
 
+        }
         return super.onOptionsItemSelected(item);
     }
 
-    private void preencheDados(){
+    private void preencheDados() {
         edtNome.setText(contato.getNome());
         edtTelefone.setText(contato.getTelefone());
         spnTipoTelefone.setSelection(Integer.parseInt(contato.getTipoTelefone()));
         edtEmail.setText(contato.getEmail());
-        spnTipoEmail.setSelection(Integer.parseInt(contato.getEmail()));
+        spnTipoEmail.setSelection(Integer.parseInt(contato.getTipoEmail()));
         edtEndereco.setText(contato.getEndereco());
         spnTipoEndereco.setSelection(Integer.parseInt(contato.getTipoEndereco()));
 
@@ -174,7 +175,7 @@ public class ActCadContatos extends AppCompatActivity {
         edtGrupos.setText(contato.getGrupos());
     }
 
-    private void inserir() {
+    private void salvar() {
         try {
             contato.setNome(edtNome.getText().toString());
             contato.setTelefone(edtTelefone.getText().toString());
@@ -188,8 +189,12 @@ public class ActCadContatos extends AppCompatActivity {
             contato.setTipoEndereco(String.valueOf(spnTipoEndereco.getSelectedItemPosition()));
             contato.setTipoEmail(String.valueOf(spnTipoEmail.getSelectedItemPosition()));
             contato.setTipoDatasEspeciais(String.valueOf(spnTipoDatasEspeciais.getSelectedItemPosition()));
-
+            if(contato.getId() == 0){
             repositorioContato.inserir(contato);
+            }
+            else{
+                repositorioContato.alterar(contato);
+            }
         } catch (Exception ex) {
             AlertDialog.Builder dlg = new AlertDialog.Builder(ActCadContatos.this);
             dlg.setMessage("Erro ao inserir os dados: " + ex.getMessage());
