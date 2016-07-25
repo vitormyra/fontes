@@ -42,17 +42,17 @@ public class RepositorioContato {
     }
 
     public void excluir(long id){
-        conn.delete("CONTATO", "_id = ? ", new String[]{String.valueOf(id)});
+        conn.delete(Contato.TABELA, "_id = ? ", new String[]{String.valueOf(id)});
     }
 
     public void alterar(Contato contato) {
             ContentValues values = preencheContentValues(contato);
-            conn.update("CONTATO", values, "_id = ? ", new String[]{String.valueOf(contato.getId())});
+            conn.update(Contato.TABELA, values, "_id = ? ", new String[]{String.valueOf(contato.getId())});
     }
 
     public void inserir(Contato contato) {
             ContentValues values = preencheContentValues(contato);
-            conn.insertOrThrow("CONTATO", null, values);
+            conn.insertOrThrow(Contato.TABELA, null, values);
     }
 
 
@@ -60,7 +60,7 @@ public class RepositorioContato {
 
         ArrayAdapter<Contato> adpContatos = new ArrayAdapter<Contato>(context, android.R.layout.simple_list_item_1);
 
-        Cursor cursor = conn.query("CONTATO", null, null, null, null, null, null);
+        Cursor cursor = conn.query(Contato.TABELA, null, null, null, null, null, null);
 
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();

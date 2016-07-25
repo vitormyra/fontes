@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by vitormyra on 17/07/16.
  */
 public class Contato implements Serializable {
-
+    public static String TABELA = "CONTATO";
     public static String ID = "_id";
     public static String NOME = "NOME";
     public static String TELEFONE = "TELEFONE";

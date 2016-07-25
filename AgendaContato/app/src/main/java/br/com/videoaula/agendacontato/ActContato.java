@@ -6,6 +6,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.*;
 import android.view.*;
 import android.content.*;
@@ -13,6 +15,7 @@ import android.content.*;
 import android.database.sqlite.*;
 import android.database.*;
 
+import br.com.videoaula.agendacontato.app.MessageBox;
 import br.com.videoaula.agendacontato.database.DataBase;
 import br.com.videoaula.agendacontato.dominio.RepositorioContato;
 import br.com.videoaula.agendacontato.dominio.entidades.Contato;
@@ -27,6 +30,8 @@ public class ActContato extends AppCompatActivity implements View.OnClickListene
     private DataBase dataBase;
     private SQLiteDatabase conn;
     private RepositorioContato repositorioContato;
+
+    public static final String PAR_CONTATO = "CONTATO";
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,12 +77,12 @@ public class ActContato extends AppCompatActivity implements View.OnClickListene
             adpContatos = repositorioContato.buscaContatos(ActContato.this);
 
             lstContatos.setAdapter(adpContatos);
+
+            FiltraDados filtraDados = new FiltraDados(adpContatos);
+            edtPesquisa.addTextChangedListener(filtraDados);
         }
         catch (SQLException ex){
-            AlertDialog.Builder dlg = new AlertDialog.Builder(ActContato.this);
-            dlg.setMessage("Erro ao criar o banco: " + ex.getMessage());
-            dlg.setNeutralButton("OK", null);
-            dlg.show();
+            MessageBox.show(this, "Erro", "Erro ao criar o banco: " + ex.getMessage());
         }
     }
 
@@ -100,7 +105,31 @@ public class ActContato extends AppCompatActivity implements View.OnClickListene
         Contato contato = adpContatos.getItem(position);
 
         Intent it = new Intent(ActContato.this, ActCadContatos.class);
-        it.putExtra("CONTATO", contato);
+        it.putExtra(PAR_CONTATO, contato);
         startActivityForResult(it, 0);
+    }
+
+    private class FiltraDados implements TextWatcher{
+
+        private ArrayAdapter<Contato> arrayAdapter;
+
+        private FiltraDados(ArrayAdapter<Contato>arrayAdapter){
+            this.arrayAdapter = arrayAdapter;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            arrayAdapter.getFilter().filter(charSequence);
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
     }
 }
