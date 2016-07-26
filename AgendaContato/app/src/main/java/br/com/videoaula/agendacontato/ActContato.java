@@ -88,6 +88,14 @@ public class ActContato extends AppCompatActivity implements View.OnClickListene
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(conn != null){
+            conn.close();
+        }
+    }
+
+    @Override
     public void onClick(View view) {
 
         Intent it = new Intent(ActContato.this, ActCadContatos.class);
