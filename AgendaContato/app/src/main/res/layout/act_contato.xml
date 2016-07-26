@@ -13,10 +13,11 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:layout_width="match_parent">
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
@@ -27,13 +28,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/ibtAdicionar"
-            android:src="@android:drawable/ic_menu_add" />
+            android:src="@android:drawable/ic_menu_add"
+            android:contentDescription="@string/Adicionar" />
 
     </LinearLayout>
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/lstContatos"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:layout_height="0dp" />
 </LinearLayout>

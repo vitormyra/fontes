@@ -52,7 +52,7 @@
             android:layout_gravity="center_horizontal">
 
             <EditText
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:inputType="phone"
                 android:ems="10"
@@ -86,7 +86,7 @@
             android:layout_gravity="center_horizontal" >
 
             <EditText
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:id="@+id/edtEmail"
@@ -120,7 +120,7 @@
             android:layout_gravity="center_horizontal" >
 
             <EditText
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:id="@+id/edtEndereco"
@@ -154,7 +154,7 @@
             android:layout_gravity="center_horizontal" >
 
             <EditText
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:inputType="date"
                 android:ems="10"

@@ -25,7 +25,8 @@ public class ActContato extends AppCompatActivity implements View.OnClickListene
     private ImageButton ibtAdicionar;
     private EditText edtPesquisa;
     private ListView lstContatos;
-    private ArrayAdapter<Contato>adpContatos;
+    //private ArrayAdapter<Contato>adpContatos;
+    private ContatoArrayAdapter adpContatos;
 
     private DataBase dataBase;
     private SQLiteDatabase conn;
@@ -111,9 +112,10 @@ public class ActContato extends AppCompatActivity implements View.OnClickListene
 
     private class FiltraDados implements TextWatcher{
 
-        private ArrayAdapter<Contato> arrayAdapter;
+        //private ArrayAdapter<Contato> arrayAdapter;
+        private ContatoArrayAdapter arrayAdapter;
 
-        private FiltraDados(ArrayAdapter<Contato>arrayAdapter){
+        private FiltraDados(ContatoArrayAdapter arrayAdapter){
             this.arrayAdapter = arrayAdapter;
         }
 
