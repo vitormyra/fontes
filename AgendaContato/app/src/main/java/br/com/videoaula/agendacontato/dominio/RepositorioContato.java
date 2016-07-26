@@ -4,11 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import br.com.videoaula.agendacontato.R;
 import android.widget.ArrayAdapter;
 
 import java.util.Date;
 import java.util.StringTokenizer;
 
+import br.com.videoaula.agendacontato.ContatoArrayAdapter;
 import br.com.videoaula.agendacontato.dominio.entidades.Contato;
 
 /**
@@ -56,9 +58,9 @@ public class RepositorioContato {
     }
 
 
-    public ArrayAdapter<Contato> buscaContatos(Context context) {
+    public ContatoArrayAdapter buscaContatos(Context context) {
 
-        ArrayAdapter<Contato> adpContatos = new ArrayAdapter<Contato>(context, android.R.layout.simple_list_item_1);
+        ContatoArrayAdapter adpContatos = new ContatoArrayAdapter(context, R.layout.item_contato);
 
         Cursor cursor = conn.query(Contato.TABELA, null, null, null, null, null, null);
 
