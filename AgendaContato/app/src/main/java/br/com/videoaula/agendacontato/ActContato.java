@@ -33,6 +33,7 @@ public class ActContato extends AppCompatActivity implements View.OnClickListene
     private RepositorioContato repositorioContato;
     private FiltraDados filtraDados;
 
+
     public static final String PAR_CONTATO = "CONTATO";
 
     @Override

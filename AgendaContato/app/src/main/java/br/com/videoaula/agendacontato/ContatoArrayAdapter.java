@@ -2,10 +2,12 @@ package br.com.videoaula.agendacontato;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import br.com.videoaula.agendacontato.dominio.entidades.Contato;
@@ -19,6 +21,7 @@ public class ContatoArrayAdapter extends ArrayAdapter<Contato> {
     private int resource = 0;
     private LayoutInflater inflater;
     private Context context;
+    private String telefone;
 
     public ContatoArrayAdapter(Context context, int resource) {
         super(context, resource);
@@ -41,6 +44,7 @@ public class ContatoArrayAdapter extends ArrayAdapter<Contato> {
             viewHolder.txtCor = (TextView) view.findViewById(R.id.txtCor);
             viewHolder.txtNome = (TextView) view.findViewById(R.id.txtNome);
             viewHolder.txtTelefone = (TextView) view.findViewById(R.id.txtTelefone);
+            viewHolder.ibtLigar = (ImageButton)view.findViewById(R.id.ibtLigar);
 
             view.setTag(viewHolder);
 
@@ -64,6 +68,11 @@ public class ContatoArrayAdapter extends ArrayAdapter<Contato> {
         viewHolder.txtNome.setText(contato.getNome());
         viewHolder.txtTelefone.setText(contato.getTelefone());
 
+
+        telefone = viewHolder.txtTelefone.getText().toString();
+        RealizarLigacoes listenner_ibtLigar = new RealizarLigacoes();
+        viewHolder.ibtLigar.setOnClickListener(listenner_ibtLigar);
+
         return view;
     }
 
@@ -71,5 +80,17 @@ public class ContatoArrayAdapter extends ArrayAdapter<Contato> {
         TextView txtCor;
         TextView txtNome;
         TextView txtTelefone;
+        ImageButton ibtLigar;
+    }
+
+    private class  RealizarLigacoes implements View.OnClickListener{
+
+        @Override
+        public void onClick(View view) {
+            AlertDialog.Builder dlg = new AlertDialog.Builder(context);
+            dlg.setMessage("Realizando ligação " + telefone);
+            dlg.setNeutralButton("OK", null);
+            dlg.show();
+        }
     }
 }
