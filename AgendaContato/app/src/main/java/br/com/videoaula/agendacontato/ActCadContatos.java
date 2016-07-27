@@ -116,6 +116,7 @@ public class ActCadContatos extends AppCompatActivity {
 
         edtTipoDatasEspeciais.setOnClickListener(listener);
         edtTipoDatasEspeciais.setOnFocusChangeListener(listener);
+        edtTipoDatasEspeciais.setKeyListener(null);
 
 
         Bundle bundle = getIntent().getExtras();
