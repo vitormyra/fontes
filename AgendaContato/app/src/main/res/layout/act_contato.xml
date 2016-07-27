@@ -28,8 +28,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/ibtAdicionar"
-            android:src="@android:drawable/ic_menu_add"
-            android:contentDescription="@string/Adicionar" />
+            android:src="@mipmap/add"
+            android:contentDescription="@string/Adicionar"
+            android:background="@mipmap/add" />
 
     </LinearLayout>
 
