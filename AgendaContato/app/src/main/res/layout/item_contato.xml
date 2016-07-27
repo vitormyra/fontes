@@ -22,7 +22,8 @@
             android:orientation="vertical"
             android:layout_width="200dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            tools:ignore="InefficientWeight,UselessParent">
 
             <TextView
                 android:layout_width="match_parent"
@@ -30,7 +31,8 @@
                 android:id="@+id/txtNome"
                 android:text="@string/lbl_nome"
                 android:layout_marginLeft="20dp"
-                tools:ignore="RtlHardcoded" />
+                tools:ignore="NestedWeights,RtlHardcoded"
+                android:layout_weight="1" />
 
             <TextView
                 android:text="@string/lbl_telefone"
@@ -38,23 +40,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txtTelefone"
                 android:paddingLeft="20dp"
-                tools:ignore="RtlHardcoded,RtlSymmetry" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="42dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                app:srcCompat="@mipmap/ligar"
-                android:id="@+id/ibtLigar"
-                android:layout_weight="1"
-                android:contentDescription="@string/lbl_ligar"
-                tools:ignore="InefficientWeight,NestedWeights" />
+                tools:ignore="RtlHardcoded,RtlSymmetry"
+                android:layout_weight="1" />
         </LinearLayout>
 
     </LinearLayout>

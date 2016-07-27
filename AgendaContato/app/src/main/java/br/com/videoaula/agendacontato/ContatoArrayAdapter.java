@@ -44,7 +44,7 @@ public class ContatoArrayAdapter extends ArrayAdapter<Contato> {
             viewHolder.txtCor = (TextView) view.findViewById(R.id.txtCor);
             viewHolder.txtNome = (TextView) view.findViewById(R.id.txtNome);
             viewHolder.txtTelefone = (TextView) view.findViewById(R.id.txtTelefone);
-            viewHolder.ibtLigar = (ImageButton)view.findViewById(R.id.ibtLigar);
+            /*viewHolder.ibtLigar = (ImageButton)view.findViewById(R.id.ibtLigar);*/
 
             view.setTag(viewHolder);
 
@@ -68,11 +68,6 @@ public class ContatoArrayAdapter extends ArrayAdapter<Contato> {
         viewHolder.txtNome.setText(contato.getNome());
         viewHolder.txtTelefone.setText(contato.getTelefone());
 
-
-        telefone = viewHolder.txtTelefone.getText().toString();
-        RealizarLigacoes listenner_ibtLigar = new RealizarLigacoes();
-        viewHolder.ibtLigar.setOnClickListener(listenner_ibtLigar);
-
         return view;
     }
 
@@ -80,10 +75,10 @@ public class ContatoArrayAdapter extends ArrayAdapter<Contato> {
         TextView txtCor;
         TextView txtNome;
         TextView txtTelefone;
-        ImageButton ibtLigar;
+        /*ImageButton ibtLigar;*/
     }
 
-    private class  RealizarLigacoes implements View.OnClickListener{
+  /*  private class  RealizarLigacoes implements View.OnClickListener{
 
         @Override
         public void onClick(View view) {
@@ -92,5 +87,5 @@ public class ContatoArrayAdapter extends ArrayAdapter<Contato> {
             dlg.setNeutralButton("OK", null);
             dlg.show();
         }
-    }
+    }*/
 }
